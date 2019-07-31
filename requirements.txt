@@ -1,0 +1,5 @@
+gpiozero
+numpy
+tqdm
+python-telegram-bot
+configargparse

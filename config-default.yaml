@@ -1,0 +1,8 @@
+port: GPIO17
+sleep_time: .002
+threshold: .94
+cool_down_in_s: 5
+queue_len: 1000
+telegram_bot_token: "TELEGRAM_BOT_TOKEN"
+telegram_chat_id: "TELEGRAM_CHAT_ID"
+verbose: True
