@@ -32,7 +32,8 @@ def main():
             val = mic.value
             vals.append(val)
             time.sleep(args.sleep_time)
-    except KeyboardInterrupt as e:
+    except KeyboardInterrupt:
+        # CTRL + C is catched
         pass
     finally:
         time_end = helper.get_timestamp()

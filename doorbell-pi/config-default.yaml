@@ -3,7 +3,7 @@ port: GPIO17
 sleep_time: .002
 threshold: .96
 cool_down_in_s: 5
-queue_len: 1000
+rolling_window_size: 1000
 telegram_bot_token: TELEGRAM_BOT_TOKEN
 telegram_chat_id: TELEGRAM_CHAT_ID
 verbose: True
