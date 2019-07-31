@@ -5,9 +5,8 @@ import gpiozero
 import collections
 import helper
 import time
-import numpy as np
 import notifications
-import sys
+
 
 def get_args():
   parser = configargparse.ArgumentParser(description='Detects doorbell ringing', default_config_files=[
@@ -25,15 +24,17 @@ def get_args():
   args = parser.parse_args()
   return args
 
+
+def clean_args(args):
+  return {x: getattr(args, x) for x in dir(args) if not x.startswith('telegram') and not x.startswith('_')}
+
+
 def main():
   args = get_args()
   notifications.init_notifications(args.telegram_bot_token, args.telegram_chat_id)
-  args_clean = {x: getattr(args, x) for x in dir(args) if not x.startswith('telegram') and not x.startswith('_')}
-
-  notifications.send_notification(f'Starting to record with options: {args_clean})')
+  notifications.send_notification(f'Starting to record with options: {clean_args(args)})')
 
   mic = gpiozero.InputDevice(args.port)
-  vals = []
 
   q = collections.deque(maxlen=args.queue_len)
 
@@ -54,6 +55,6 @@ def main():
     time.sleep(args.sleep_time)
     c = c + 1
 
-if __name__ == '__main__':
-    main()
 
+if __name__ == '__main__':
+  main()

@@ -2,11 +2,10 @@
 
 import gpiozero
 import time
-import collections
-import numpy as np
 import helper
 import tqdm
 import os
+
 
 def get_args():
   import argparse
@@ -17,6 +16,7 @@ def get_args():
   parser.add_argument('--sleep_time', type=float, default=.002)
   args = parser.parse_args()
   return args
+
 
 def main():
   args = get_args()
@@ -44,6 +44,7 @@ def main():
     with open(filename, 'w') as f:
       f.write(f"#{time_start},{time_end}\n")
       f.write('\n'.join([str(x) for x in vals]))
-    
+
+
 if __name__ == '__main__':
-    main()
+  main()
