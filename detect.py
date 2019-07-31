@@ -41,7 +41,7 @@ def main():
   while True:
     q.append(mic.value)
 
-    if (len(q) < args.queue_len): continue
+    if len(q) < args.queue_len: continue
 
     if args.verbose and c % 500 == 0:
       print(f"avg: {helper.average(q)}")
