@@ -1,0 +1,14 @@
+[Unit]
+Description=Doorbell Pi
+
+[Install]
+WantedBy=multi-user.target
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=WORKING_DIR
+ExecStart=env python3 detect.py
+Restart=always
+

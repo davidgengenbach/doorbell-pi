@@ -3,8 +3,7 @@
 HOST="david-pi"
 
 while true; do
-  echo "Syncing"
-  rsync --archive --partial --quiet --exclude=recording ./ $HOST:doorbell-pi/
-  rsync --archive --partial --quiet --exclude=recording $HOST:doorbell-pi/recordings/ recordings/
-  sleep 1
+  rsync --archive --partial --quiet --exclude=doorbell-pi/recordings ./ $HOST:doorbell-pi/
+  rsync --archive --partial --quiet $HOST:doorbell-pi/doorbell-pi/recordings/ doorbell-pi/recordings/
+  sleep 0.5
 done
