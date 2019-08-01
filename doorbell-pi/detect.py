@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import logging
 import configargparse
 import gpiozero
 import collections
@@ -24,9 +25,12 @@ def get_args():
     parser.add_argument('--threshold', type=float)
     parser.add_argument('--cool_down_in_s', type=int)
     parser.add_argument('--rolling_window_size', type=int)
-    parser.add_argument('--verbose', action="store_true")
     parser.add_argument('--telegram_bot_token', type=str)
     parser.add_argument('--telegram_chat_id', type=str)
+    parser.add_argument('--log_level',
+                        choices=['DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL'],
+                        help='Set the logging level'
+                        )
 
     args = parser.parse_args()
     return args
@@ -34,8 +38,13 @@ def get_args():
 
 def main():
     args = get_args()
+    init_logging(args.log_level)
+
+    clean_opts = helper.clean_args(args)
+
+    logging.info(f'Options: {clean_opts}')
     notifications.init_notifications(args.telegram_bot_token, args.telegram_chat_id)
-    notifications.send_notification(f'Starting to record with options: {helper.clean_args(args)})')
+    notifications.send_notification(f'Starting to record with options: {clean_opts})')
 
     mic = gpiozero.InputDevice(args.port)
 
@@ -44,6 +53,7 @@ def main():
     c = 0
     while True:
         time.sleep(args.sleep_time)
+        c = c + 1
 
         q.append(mic.value)
 
@@ -51,19 +61,27 @@ def main():
         if len(q) < args.rolling_window_size:
             continue
 
-        if args.verbose and c % 1000 == 0:
-            print(f"avg: {helper.average(q)}")
+        # Only calculate average after "rolling_window_size" iterations to decrease load
+        if c % args.rolling_window_size != 0:
+            continue
 
         if helper.signal_detected(q, threshold=args.threshold):
             notifications.send_notification(
                 f'Threshold was crossed! Rolling average: {helper.average(q)} (Threshold: {args.threshold})'
             )
-            print(f'Signal detected: {helper.get_timestamp()}')
+            logging.info(f'Signal detected: {helper.get_timestamp()}')
 
             q.clear()
 
             time.sleep(args.cool_down_in_s)
-        c = c + 1
+
+
+def init_logging(level):
+    logging.basicConfig(
+        level=getattr(logging, level.upper()),
+        format='%(asctime)s %(levelname)-8s %(message)s',
+        datefmt='%Y-%m-%d %H:%M:%S'
+    )
 
 
 if __name__ == '__main__':
