@@ -26,25 +26,24 @@ def main():
 
     os.makedirs(args.folder, exist_ok=True)
 
+    time_start = helper.get_timestamp()
     try:
-        time_start = helper.get_timestamp()
-        for i in tqdm.tqdm(range(args.num_values)):
-            val = mic.value
-            vals.append(val)
+        for _ in tqdm.tqdm(range(args.num_values)):
+            vals.append(mic.value)
             time.sleep(args.sleep_time)
     except KeyboardInterrupt:
         # CTRL + C is catched
         pass
     finally:
-        time_end = helper.get_timestamp()
         if len(vals) == 0:
             return
-        filename = f'{args.folder}/recording_{time_end}.txt'
+        time_end = helper.get_timestamp()
+        filename = f'{args.folder}/recording_{time_start}.txt'
         print(f"Saving recording (filename: {filename})")
 
         with open(filename, 'w') as f:
             f.write(f"#{time_start},{time_end}\n")
-            f.write('\n'.join([str(x) for x in vals]))
+            f.write('\n'.join(str(x) for x in vals))
 
 
 if __name__ == '__main__':

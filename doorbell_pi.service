@@ -11,4 +11,3 @@ Type=simple
 WorkingDirectory=WORKING_DIR
 ExecStart=env python3 detect.py
 Restart=always
-
