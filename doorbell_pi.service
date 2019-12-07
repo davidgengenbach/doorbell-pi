@@ -1,10 +1,10 @@
 [Unit]
 Description=Doorbell Pi
+After=network-online.target
+Wants=network-online.target
 
 [Install]
 WantedBy=multi-user.target
-After=network-online.target
-Wants=network-online.target
 
 [Service]
 Type=simple
