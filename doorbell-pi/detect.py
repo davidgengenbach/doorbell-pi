@@ -27,6 +27,8 @@ def get_args():
     parser.add_argument('--rolling_window_size', type=int)
     parser.add_argument('--telegram_bot_token', type=str)
     parser.add_argument('--telegram_chat_id', type=str)
+    parser.add_argument('--pushover_app_key', type=str)
+    parser.add_argument('--pushover_user_key', type=str)
     parser.add_argument('--log_level',
                         choices=['DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL'],
                         help='Set the logging level'
@@ -43,7 +45,9 @@ def main():
     clean_opts = helper.clean_args(args)
 
     logging.info(f'Options: {clean_opts}')
-    notifications.init_notifications(args.telegram_bot_token, args.telegram_chat_id)
+    notifications.init_notifications(
+        args.telegram_bot_token, args.telegram_chat_id, args.pushover_app_key, args.pushover_user_key
+    )
     notifications.send_notification(f'Starting to record with options: {clean_opts})')
 
     mic = gpiozero.InputDevice(args.port)

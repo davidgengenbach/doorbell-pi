@@ -16,4 +16,4 @@ def signal_detected(values, threshold=0.9):
 
 
 def clean_args(args):
-    return {x: getattr(args, x) for x in dir(args) if not x.startswith('telegram') and not x.startswith('_')}
+    return {x: getattr(args, x) for x in dir(args) if not x.startswith('telegram') and not x.startswith('pushover') and not x.startswith('_')}
